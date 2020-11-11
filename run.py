@@ -26,7 +26,7 @@ class AutoCheckInNOut:
         self.quitDriver()
 
     def restartDriver(self):
-        self.browser = webdriver.Chrome(executable_path='./chromedriver-mac')
+        self.browser = webdriver.Chrome(executable_path='./chromedriver-linux')
 
     def quitDriver(self):
         self.browser.quit()
