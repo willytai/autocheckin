@@ -39,6 +39,7 @@ class CheckIn(AutoLogin):
 
     def signIn(self):
         self.login2page()
+        time.sleep( 2 )
         signInButton = self.browser.find_element_by_id( 'btSign' )
         signInButton.click()
         self.browser.quit()
@@ -49,6 +50,7 @@ class CheckOut(AutoLogin):
 
     def signOut(self):
         self.login2page()
+        time.sleep( 2 )
         signOutButton = self.browser.find_element_by_id( 'btSign2' )
         signOutButton.click()
         self.browser.quit()
@@ -75,15 +77,22 @@ def dffTime(cur, ref):
 
 if __name__ == '__main__':
     args = parse()
-    stat = SIGNOUT
+    stat = SIGNIN
     action = ['signIn', 'signOut']
-    refTime = [17, 30, 25]
+    wday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    refTime = [8, randint(0, 20), randint(0, 59)]
+
 
     while True:
         sleepTime = dffTime( time.localtime(), refTime )
-        print ('{} at {}:{}:{}, sleeping for {}s'.format(action[stat], refTime[0], refTime[1], refTime[2], sleepTime))
+        print ('{} at {:02d}:{:02d}:{:02d}, sleeping for {}s'.format(action[stat], refTime[0], refTime[1], refTime[2], sleepTime))
         time.sleep(sleepTime)
-        print ('[current time] {}'.format(time.strftime("%H:%M:%S", time.localtime())))
+        curTime = time.localtime()
+        print ('[current time] {}'.format(time.strftime("%H:%M:%S", curTime)))
+        if curTime.tm_wday == 5 or curTime.tm_wday == 6:
+            print ('It is {}, waiting till tomorrow'.format(wday[curTime.tm_wday]))
+            time.sleep(2)
+            continue
 
         if stat == SIGNIN:
             cin = CheckIn( args.username, args.password )
